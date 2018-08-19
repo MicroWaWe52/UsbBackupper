@@ -45,6 +45,10 @@ namespace UsbBackupper
         {
             var drive = listDrives.First(d => d.VolumeLabel == comboBoxDevice.Text);
             var volumeLabel = drive.VolumeLabel;
+            if (textBoxBackupPath.Text.Last()!='\\')
+            {
+                textBoxBackupPath.Text += '\\';
+            }
             var backupPath = textBoxBackupPath.Text +$@"{volumeLabel}-Backup";
             Directory.CreateDirectory(backupPath);
             var deviceRoot = drive.RootDirectory;
