@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Configuration;
-using System.Text;
 using System.Xml.Serialization;
 
 namespace UsbBackupper
@@ -52,6 +50,8 @@ namespace UsbBackupper
         public void Clear()
         {
             usbList.Clear();
+            Serialize();
+
         }
 
         public bool Contains(UsbInfo item)
@@ -66,7 +66,10 @@ namespace UsbBackupper
 
         public bool Remove(UsbInfo item)
         {
-            return usbList.Remove(item);
+            var result = usbList.Remove(item);
+            Serialize();
+            return result;
+
         }
 
         public int Count => usbList.Count;
@@ -119,16 +122,19 @@ namespace UsbBackupper
         public void Insert(int index, UsbInfo item)
         {
             usbList.Insert(index, item);
+            Serialize();
+
         }
 
         public void RemoveAt(int index)
         {
             usbList.RemoveAt(index);
+            Serialize();
         }
 
         public UsbInfo this[int index]
         {
-            get => usbList[index];
+            get => index==-1 ? new UsbInfo("","",Guid.NewGuid(),"") : usbList[index];
             set => usbList[index] = value;
         }
     }

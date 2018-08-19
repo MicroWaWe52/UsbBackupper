@@ -1,18 +1,13 @@
-﻿using System;
+﻿using Ionic.Zip;
+using Ionic.Zlib;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Management;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Ionic.Zip;
-using Ionic.Zlib;
-
 namespace UsbBackupper
 {
     public partial class Form1 : Form
@@ -74,13 +69,17 @@ namespace UsbBackupper
             StartDetector();
         }
 
-       
+
 
         private void aggiungiToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var addForm = new FormAdd();
-            addForm.ShowDialog();
+            new FormAdd().ShowDialog();
             usbInfoList = UsbInfoList.Deserialize() ?? new UsbInfoList();
+            listBoxDevices.Items.Clear();
+            foreach (var usbs in usbInfoList)
+            {
+                listBoxDevices.Items.Add(usbs.VolumeLabel);
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -100,7 +99,15 @@ namespace UsbBackupper
 
         private void LinkLabelDeviceBackupPath_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start(linkLabelDeviceBackupPath.Tag.ToString());
+            try
+            {
+                Process.Start(linkLabelDeviceBackupPath.Tag.ToString());
+
+            }
+            catch 
+            {
+                
+            }
         }
 
         private void frmMain_Resize(object sender, EventArgs e)
@@ -109,7 +116,7 @@ namespace UsbBackupper
             {
                 Hide();
             }
-            
+
         }
         private void Form1_Shown(object sender, EventArgs e)
         {
@@ -141,6 +148,17 @@ namespace UsbBackupper
             linkLabelDeviceBackupPath.Text = "Percorso di backup:" + usbinfo.BackupPath;
             linkLabelDeviceBackupPath.Tag = usbinfo.BackupPath;
             labelDeviceLastBackup.Text = "Ultimo backup:" + usbinfo.LastBackup;
+        }
+
+        private void rimuoviToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new FormRemove().ShowDialog();
+            usbInfoList = UsbInfoList.Deserialize() ?? new UsbInfoList();
+            listBoxDevices.Items.Clear();
+            foreach (var usbs in usbInfoList)
+            {
+                listBoxDevices.Items.Add(usbs.VolumeLabel);
+            }
         }
     }
 }
