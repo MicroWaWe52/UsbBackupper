@@ -77,7 +77,7 @@
             this.comboBoxDevice.FormattingEnabled = true;
             this.comboBoxDevice.Location = new System.Drawing.Point(16, 32);
             this.comboBoxDevice.Name = "comboBoxDevice";
-            this.comboBoxDevice.Size = new System.Drawing.Size(61, 21);
+            this.comboBoxDevice.Size = new System.Drawing.Size(134, 21);
             this.comboBoxDevice.TabIndex = 6;
             // 
             // buttonAdd

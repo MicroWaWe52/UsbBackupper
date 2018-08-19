@@ -29,10 +29,7 @@ namespace UsbBackupper
                 if (drive.Name != @"C:\") comboBoxDevice.Items.Add(drive.VolumeLabel);
             }
 
-            if (!File.Exists("devices.xml")) return;
-            var xmlser = new XmlSerializer(typeof(UsbInfoList));
-            var stream=new StreamReader("devices.xml");
-            usbInfoList =(UsbInfoList)xmlser.Deserialize(stream);
+            usbInfoList = UsbInfoList.Deserialize() ?? new UsbInfoList();
         }
 
         private void buttonBackupPath_Click(object sender, EventArgs e)
@@ -52,10 +49,19 @@ namespace UsbBackupper
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            Directory.CreateDirectory(textBoxBackupPath.Text +
-                                      $"{listDrives[comboBoxDevice.SelectedIndex].VolumeLabel}-Backup");
-
-
+            var drive = listDrives.First(d => d.VolumeLabel == comboBoxDevice.Text);
+            var volumeLabel = drive.VolumeLabel;
+            var backupPath = textBoxBackupPath.Text +$@"{volumeLabel}-Backup";
+            Directory.CreateDirectory(backupPath);
+            var deviceRoot = drive.RootDirectory;
+            var id=Guid.NewGuid();
+            using (var stream=new StreamWriter(deviceRoot+"UsbBackupper.bck"))
+            {
+                stream.WriteLine(id.ToString("D"));
+                stream.Close();
+            }
+            usbInfoList.Add(new UsbInfoList.UsbInfo(backupPath, volumeLabel,id));
+            Close();
         }
     }
 }
