@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace UsbBackupper
@@ -30,7 +31,7 @@ namespace UsbBackupper
             {
                 if (checkBoxRemoveDelete.Checked)
                 {
-                    Directory.Delete(deletedDrive.BackupPath, true);
+                    Task.Factory.StartNew(() => { Directory.Delete(deletedDrive.BackupPath, true); });
                 }
 
                 var drives = DriveInfo.GetDrives();

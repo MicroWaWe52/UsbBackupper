@@ -21,13 +21,15 @@ namespace UsbBackupper
             public Guid DeviceId;
             public string LastBackup;
             public BackupMode backupMode;
-            public UsbInfo(string backupPath, string volumeLabel, Guid deviceId, BackupMode backupMode,string lastBackup = "Mai")
+            public bool CanAutoBackup;
+            public UsbInfo(string backupPath, string volumeLabel, Guid deviceId, BackupMode backupMode,string lastBackup = "Mai",bool canAuto=true)
             {
                 BackupPath = backupPath;
                 VolumeLabel = volumeLabel;
                 DeviceId = deviceId;
                 LastBackup = lastBackup;
                 this.backupMode = backupMode;
+                CanAutoBackup = canAuto;
             }
             public enum BackupMode
             {

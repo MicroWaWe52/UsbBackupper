@@ -35,6 +35,8 @@
             this.aggiungiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rimuoviToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.listBoxDevices = new System.Windows.Forms.ListBox();
             this.labelDeviceName = new System.Windows.Forms.Label();
             this.labelDeviceLastBackup = new System.Windows.Forms.Label();
@@ -44,11 +46,11 @@
             this.radioButtonSingle = new System.Windows.Forms.RadioButton();
             this.radioButtonLight = new System.Windows.Forms.RadioButton();
             this.radioButtonFast = new System.Windows.Forms.RadioButton();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonBackNow = new System.Windows.Forms.Button();
+            this.checkBoxAutoBackup = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -73,14 +75,14 @@
             // aggiungiToolStripMenuItem
             // 
             this.aggiungiToolStripMenuItem.Name = "aggiungiToolStripMenuItem";
-            this.aggiungiToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.aggiungiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.aggiungiToolStripMenuItem.Text = "Add";
             this.aggiungiToolStripMenuItem.Click += new System.EventHandler(this.aggiungiToolStripMenuItem_Click);
             // 
             // rimuoviToolStripMenuItem
             // 
             this.rimuoviToolStripMenuItem.Name = "rimuoviToolStripMenuItem";
-            this.rimuoviToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.rimuoviToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.rimuoviToolStripMenuItem.Text = "Remove";
             this.rimuoviToolStripMenuItem.Click += new System.EventHandler(this.rimuoviToolStripMenuItem_Click);
             // 
@@ -93,7 +95,22 @@
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "UsbBackupper";
             this.notifyIcon1.Visible = true;
+            this.notifyIcon1.BalloonTipClicked += new System.EventHandler(this.notifyIcon1_BalloonTipClicked);
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(93, 26);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // listBoxDevices
             // 
@@ -141,6 +158,7 @@
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Backup mode";
+            this.groupBox1.Visible = false;
             // 
             // radioButtonComplex
             // 
@@ -188,25 +206,36 @@
             this.radioButtonFast.UseVisualStyleBackColor = true;
             this.radioButtonFast.CheckedChanged += new System.EventHandler(this.radioButtonFast_CheckedChanged);
             // 
-            // contextMenuStrip1
+            // buttonBackNow
             // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.exitToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 48);
+            this.buttonBackNow.Location = new System.Drawing.Point(480, 363);
+            this.buttonBackNow.Name = "buttonBackNow";
+            this.buttonBackNow.Size = new System.Drawing.Size(200, 45);
+            this.buttonBackNow.TabIndex = 11;
+            this.buttonBackNow.Text = "Backup Now";
+            this.buttonBackNow.UseVisualStyleBackColor = true;
+            this.buttonBackNow.Visible = false;
+            this.buttonBackNow.Click += new System.EventHandler(this.buttonBackNow_Click);
             // 
-            // exitToolStripMenuItem
+            // checkBoxAutoBackup
             // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.checkBoxAutoBackup.AutoSize = true;
+            this.checkBoxAutoBackup.Location = new System.Drawing.Point(487, 223);
+            this.checkBoxAutoBackup.Name = "checkBoxAutoBackup";
+            this.checkBoxAutoBackup.Size = new System.Drawing.Size(85, 17);
+            this.checkBoxAutoBackup.TabIndex = 12;
+            this.checkBoxAutoBackup.Text = "AutoBackup";
+            this.checkBoxAutoBackup.UseVisualStyleBackColor = true;
+            this.checkBoxAutoBackup.Visible = false;
+            this.checkBoxAutoBackup.CheckedChanged += new System.EventHandler(this.checkBoxAutoBackup_CheckedChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.checkBoxAutoBackup);
+            this.Controls.Add(this.buttonBackNow);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.linkLabelDeviceBackupPath);
             this.Controls.Add(this.labelDeviceLastBackup);
@@ -222,9 +251,9 @@
             this.Resize += new System.EventHandler(this.frmMain_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -247,6 +276,8 @@
         private System.Windows.Forms.RadioButton radioButtonFast;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.Button buttonBackNow;
+        private System.Windows.Forms.CheckBox checkBoxAutoBackup;
     }
 }
 
