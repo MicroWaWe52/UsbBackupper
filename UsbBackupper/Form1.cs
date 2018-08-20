@@ -14,6 +14,7 @@ namespace UsbBackupper
     {
         private List<DriveInfo> listDrives;
         private UsbInfoList usbInfoList;
+        private bool close = false;
         public Form1()
         {
             InitializeComponent();
@@ -333,6 +334,19 @@ namespace UsbBackupper
             if (!radioButtonComplex.Checked) return;
             var info = usbInfoList[listBoxDevices.SelectedIndex];
             usbInfoList[listBoxDevices.SelectedIndex] = new UsbInfoList.UsbInfo(info.BackupPath, info.VolumeLabel, info.DeviceId, UsbInfoList.UsbInfo.BackupMode.Complex, info.LastBackup);
+        }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (close) return;
+            e.Cancel = true;
+            Hide();
+
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            close = true;
+            Close();
         }
     }
 }
