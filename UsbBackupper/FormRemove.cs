@@ -30,19 +30,27 @@ namespace UsbBackupper
             {
                 if (checkBoxRemoveDelete.Checked)
                 {
-                    Directory.Delete(deletedDrive.BackupPath,true);
+                    Directory.Delete(deletedDrive.BackupPath, true);
                 }
 
                 var drives = DriveInfo.GetDrives();
                 drives = drives.Where(d => d.DriveType != DriveType.CDRom).ToArray();
-                File.Delete(drives.First(drive => drive.VolumeLabel == deletedDrive.VolumeLabel).RootDirectory + "UsbBackupper.bck");
-              
+                try
+                {
+                    File.Delete(drives.First(drive => drive.VolumeLabel == deletedDrive.VolumeLabel).RootDirectory + "UsbBackupper.bck");
+                }
+                finally
+                {
+                    Close();
+                }
+
                 Close();
             }
             catch (DirectoryNotFoundException)
             {
                 MessageBox.Show("Impossibile cancellare i backup\nprobabilmente sono gia stati eliminati");
             }
+            finally { Close(); }
 
         }
     }

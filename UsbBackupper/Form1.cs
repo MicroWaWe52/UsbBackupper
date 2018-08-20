@@ -87,18 +87,32 @@ namespace UsbBackupper
             try
             {
                 var date = DateTime.Now.ToString("dd-MM-yy_hh:mm");
-                var driveFolders = Directory.GetDirectories(driveinfo.RootDirectory.ToString(), "*",
-                    SearchOption.TopDirectoryOnly).ToList();
+                var driveFolders = Directory.GetDirectories(driveinfo.RootDirectory.ToString()).ToList();
                 driveFolders = driveFolders.Where(d => !d.Contains("System Volume Information")).ToList();
                 switch (backupMode)
                 {
                     case UsbInfoList.UsbInfo.BackupMode.Fast:
                         {
-                            foreach (string dirPath in driveFolders)
-                            {
+
+                            /*{
                                 Directory.CreateDirectory(dirPath.Replace(driveinfo.RootDirectory.ToString(),
                                     usbinfo.BackupPath + "\\" + driveinfo.VolumeLabel + date + "\\"));
-                            }
+
+                                foreach (string newPath in Directory.GetFiles(dirPath, "*.*",
+                                    SearchOption.AllDirectories))
+                                {
+                                    if (!File.Exists(newPath.Replace(dirPath, usbinfo.BackupPath + '\\' + driveinfo.VolumeLabel + date + '\\')))
+                                    {
+                                        var backnfp = newPath.Replace(dirPath, usbinfo.BackupPath + '\\' + driveinfo.VolumeLabel + date + '\\');
+
+                                        Directory.CreateDirectory(newPath.Replace(dirPath, usbinfo.BackupPath + '\\' + driveinfo.VolumeLabel + date + '\\'));
+                                    }
+                                    File.Copy(newPath, newPath.Replace(dirPath, usbinfo.BackupPath + '\\' + driveinfo.VolumeLabel + date + '\\'), true);
+                                }
+                            }*/
+                            Directory.CreateDirectory(usbinfo.BackupPath + $"\\{driveinfo.VolumeLabel}-{date}");
+                            Helper.CopyFilesRecursively(new DirectoryInfo(driveinfo.RootDirectory.ToString()),
+                                new DirectoryInfo(usbinfo.BackupPath + $"\\{driveinfo.VolumeLabel}-{date}"));
                             usbInfoList[usbInfoList.IndexOf(usbinfo)] = new UsbInfoList.UsbInfo(usbinfo.BackupPath,
                                 usbinfo.VolumeLabel, usbinfo.DeviceId, usbinfo.backupMode, date);
                             usbInfoList.Serialize();
@@ -107,11 +121,9 @@ namespace UsbBackupper
                     case UsbInfoList.UsbInfo.BackupMode.Light:
                         {
 
-                            foreach (string dirPath in driveFolders)
-                            {
-                                Directory.CreateDirectory(dirPath.Replace(driveinfo.RootDirectory.ToString(),
-                                    usbinfo.BackupPath + "\\" + date + "\\"));
-                            }
+                            Directory.CreateDirectory(usbinfo.BackupPath + $"\\{driveinfo.VolumeLabel}-{date}");
+                            Helper.CopyFilesRecursively(new DirectoryInfo(driveinfo.RootDirectory.ToString()),
+                                new DirectoryInfo(usbinfo.BackupPath + $"\\{driveinfo.VolumeLabel}-{date}"));
                             using (var zip = new ZipFile(usbinfo.BackupPath))
                             {
                                 Directory.CreateDirectory(usbinfo.BackupPath + "\\temp");
