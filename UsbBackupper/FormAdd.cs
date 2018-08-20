@@ -24,6 +24,17 @@ namespace UsbBackupper
             }
 
             usbInfoList = UsbInfoList.Deserialize() ?? new UsbInfoList();
+            var toolTip1 = new ToolTip
+            {
+                AutoPopDelay = 5000,
+                InitialDelay = 1000,
+                ReshowDelay = 500
+            };
+            toolTip1.SetToolTip(radioButtonFast,"Copy the entire folder of the drive");
+            toolTip1.SetToolTip(radioButtonLight, "Compress the entire folder of the drive in one zip");
+            toolTip1.SetToolTip(radioButtonSingle, "Compress the single folders of the drive in multiple zip");
+            toolTip1.SetToolTip(radioButtonComplex, "Compress the single folders of the device and then compress in a single zip");
+
         }
 
         private void buttonBackupPath_Click(object sender, EventArgs e)
@@ -53,12 +64,28 @@ namespace UsbBackupper
             Directory.CreateDirectory(backupPath);
             var deviceRoot = drive.RootDirectory;
             var id=Guid.NewGuid();
-            using (var stream=new StreamWriter(deviceRoot+"UsbBackupper.bck"))
+            using (var stream=new StreamWriter(deviceRoot+"\\UsbBackupper.bck"))
             {
                 stream.WriteLine(id.ToString("D"));
                 stream.Close();
             }
-            usbInfoList.Add(new UsbInfoList.UsbInfo(backupPath, volumeLabel,id));
+
+            UsbInfoList.UsbInfo.BackupMode mode;
+            if (radioButtonFast.Checked)
+            {
+                mode = UsbInfoList.UsbInfo.BackupMode.Fast;
+            }else if (radioButtonLight.Checked)
+            {
+                mode = UsbInfoList.UsbInfo.BackupMode.Light;
+            }else if (radioButtonSingle.Checked)
+            {
+                mode = UsbInfoList.UsbInfo.BackupMode.Single;
+            }
+            else
+            {
+                mode = UsbInfoList.UsbInfo.BackupMode.Complex;
+            }
+            usbInfoList.Add(new UsbInfoList.UsbInfo(backupPath, volumeLabel,id,mode));
             Close();
         }
     }

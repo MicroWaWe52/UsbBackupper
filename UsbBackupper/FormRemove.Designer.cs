@@ -37,11 +37,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(45, 15);
+            this.label1.Location = new System.Drawing.Point(68, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(176, 13);
+            this.label1.Size = new System.Drawing.Size(131, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Seleziona il dispositivo da rimuovere";
+            this.label1.Text = "Select the drive to remove";
             // 
             // comboBoxRemove
             // 
@@ -57,7 +57,7 @@
             this.buttonRemove.Name = "buttonRemove";
             this.buttonRemove.Size = new System.Drawing.Size(75, 23);
             this.buttonRemove.TabIndex = 2;
-            this.buttonRemove.Text = "Rimuovi";
+            this.buttonRemove.Text = "Remove";
             this.buttonRemove.UseVisualStyleBackColor = true;
             this.buttonRemove.Click += new System.EventHandler(this.buttonRemove_Click);
             // 
@@ -66,9 +66,9 @@
             this.checkBoxRemoveDelete.AutoSize = true;
             this.checkBoxRemoveDelete.Location = new System.Drawing.Point(65, 64);
             this.checkBoxRemoveDelete.Name = "checkBoxRemoveDelete";
-            this.checkBoxRemoveDelete.Size = new System.Drawing.Size(131, 17);
+            this.checkBoxRemoveDelete.Size = new System.Drawing.Size(114, 17);
             this.checkBoxRemoveDelete.TabIndex = 3;
-            this.checkBoxRemoveDelete.Text = "Cancella tutti i backup";
+            this.checkBoxRemoveDelete.Text = "Delete all backups";
             this.checkBoxRemoveDelete.UseVisualStyleBackColor = true;
             // 
             // FormRemove
@@ -81,7 +81,7 @@
             this.Controls.Add(this.comboBoxRemove);
             this.Controls.Add(this.label1);
             this.Name = "FormRemove";
-            this.Text = "Rimuovi";
+            this.Text = "Remove";
             this.Load += new System.EventHandler(this.FormRemove_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

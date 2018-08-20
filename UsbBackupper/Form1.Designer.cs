@@ -33,13 +33,19 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.dispositiviToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aggiungiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rimuoviToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.listBoxDevices = new System.Windows.Forms.ListBox();
             this.labelDeviceName = new System.Windows.Forms.Label();
             this.labelDeviceLastBackup = new System.Windows.Forms.Label();
             this.linkLabelDeviceBackupPath = new System.Windows.Forms.LinkLabel();
-            this.rimuoviToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.radioButtonComplex = new System.Windows.Forms.RadioButton();
+            this.radioButtonSingle = new System.Windows.Forms.RadioButton();
+            this.radioButtonLight = new System.Windows.Forms.RadioButton();
+            this.radioButtonFast = new System.Windows.Forms.RadioButton();
             this.menuStrip1.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -58,15 +64,22 @@
             this.aggiungiToolStripMenuItem,
             this.rimuoviToolStripMenuItem});
             this.dispositiviToolStripMenuItem.Name = "dispositiviToolStripMenuItem";
-            this.dispositiviToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
-            this.dispositiviToolStripMenuItem.Text = "Dispositivi";
+            this.dispositiviToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
+            this.dispositiviToolStripMenuItem.Text = "Devices";
             // 
             // aggiungiToolStripMenuItem
             // 
             this.aggiungiToolStripMenuItem.Name = "aggiungiToolStripMenuItem";
-            this.aggiungiToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
-            this.aggiungiToolStripMenuItem.Text = "Aggiungi";
+            this.aggiungiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aggiungiToolStripMenuItem.Text = "Add";
             this.aggiungiToolStripMenuItem.Click += new System.EventHandler(this.aggiungiToolStripMenuItem_Click);
+            // 
+            // rimuoviToolStripMenuItem
+            // 
+            this.rimuoviToolStripMenuItem.Name = "rimuoviToolStripMenuItem";
+            this.rimuoviToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rimuoviToolStripMenuItem.Text = "Remove";
+            this.rimuoviToolStripMenuItem.Click += new System.EventHandler(this.rimuoviToolStripMenuItem_Click);
             // 
             // notifyIcon1
             // 
@@ -112,18 +125,71 @@
             this.linkLabelDeviceBackupPath.Size = new System.Drawing.Size(0, 13);
             this.linkLabelDeviceBackupPath.TabIndex = 6;
             // 
-            // rimuoviToolStripMenuItem
+            // groupBox1
             // 
-            this.rimuoviToolStripMenuItem.Name = "rimuoviToolStripMenuItem";
-            this.rimuoviToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.rimuoviToolStripMenuItem.Text = "Rimuovi";
-            this.rimuoviToolStripMenuItem.Click += new System.EventHandler(this.rimuoviToolStripMenuItem_Click);
+            this.groupBox1.Controls.Add(this.radioButtonComplex);
+            this.groupBox1.Controls.Add(this.radioButtonSingle);
+            this.groupBox1.Controls.Add(this.radioButtonLight);
+            this.groupBox1.Controls.Add(this.radioButtonFast);
+            this.groupBox1.Location = new System.Drawing.Point(480, 246);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(200, 110);
+            this.groupBox1.TabIndex = 10;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Backup mode";
+            // 
+            // radioButtonComplex
+            // 
+            this.radioButtonComplex.AutoSize = true;
+            this.radioButtonComplex.Location = new System.Drawing.Point(7, 87);
+            this.radioButtonComplex.Name = "radioButtonComplex";
+            this.radioButtonComplex.Size = new System.Drawing.Size(65, 17);
+            this.radioButtonComplex.TabIndex = 3;
+            this.radioButtonComplex.Text = "Complex";
+            this.radioButtonComplex.UseVisualStyleBackColor = true;
+            this.radioButtonComplex.CheckedChanged += new System.EventHandler(this.radioButtonComplex_CheckedChanged);
+            // 
+            // radioButtonSingle
+            // 
+            this.radioButtonSingle.AutoSize = true;
+            this.radioButtonSingle.Location = new System.Drawing.Point(7, 66);
+            this.radioButtonSingle.Name = "radioButtonSingle";
+            this.radioButtonSingle.Size = new System.Drawing.Size(86, 17);
+            this.radioButtonSingle.TabIndex = 2;
+            this.radioButtonSingle.Text = "Single Folder";
+            this.radioButtonSingle.UseVisualStyleBackColor = true;
+            this.radioButtonSingle.CheckedChanged += new System.EventHandler(this.radioButtonSingle_CheckedChanged);
+            // 
+            // radioButtonLight
+            // 
+            this.radioButtonLight.AutoSize = true;
+            this.radioButtonLight.Location = new System.Drawing.Point(7, 43);
+            this.radioButtonLight.Name = "radioButtonLight";
+            this.radioButtonLight.Size = new System.Drawing.Size(48, 17);
+            this.radioButtonLight.TabIndex = 1;
+            this.radioButtonLight.Text = "Light";
+            this.radioButtonLight.UseVisualStyleBackColor = true;
+            this.radioButtonLight.CheckedChanged += new System.EventHandler(this.radioButtonLight_CheckedChanged);
+            // 
+            // radioButtonFast
+            // 
+            this.radioButtonFast.AutoSize = true;
+            this.radioButtonFast.Checked = true;
+            this.radioButtonFast.Location = new System.Drawing.Point(7, 20);
+            this.radioButtonFast.Name = "radioButtonFast";
+            this.radioButtonFast.Size = new System.Drawing.Size(45, 17);
+            this.radioButtonFast.TabIndex = 0;
+            this.radioButtonFast.TabStop = true;
+            this.radioButtonFast.Text = "Fast";
+            this.radioButtonFast.UseVisualStyleBackColor = true;
+            this.radioButtonFast.CheckedChanged += new System.EventHandler(this.radioButtonFast_CheckedChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.linkLabelDeviceBackupPath);
             this.Controls.Add(this.labelDeviceLastBackup);
             this.Controls.Add(this.labelDeviceName);
@@ -137,6 +203,8 @@
             this.Resize += new System.EventHandler(this.frmMain_Resize);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -152,6 +220,11 @@
         private System.Windows.Forms.Label labelDeviceLastBackup;
         private System.Windows.Forms.LinkLabel linkLabelDeviceBackupPath;
         private System.Windows.Forms.ToolStripMenuItem rimuoviToolStripMenuItem;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton radioButtonComplex;
+        private System.Windows.Forms.RadioButton radioButtonSingle;
+        private System.Windows.Forms.RadioButton radioButtonLight;
+        private System.Windows.Forms.RadioButton radioButtonFast;
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -19,12 +20,26 @@ namespace UsbBackupper
             public string VolumeLabel;
             public Guid DeviceId;
             public string LastBackup;
-            public UsbInfo(string backupPath, string volumeLabel, Guid deviceId, string lastBackup = "Mai")
+            public BackupMode backupMode;
+            public UsbInfo(string backupPath, string volumeLabel, Guid deviceId, BackupMode backupMode,string lastBackup = "Mai")
             {
                 BackupPath = backupPath;
                 VolumeLabel = volumeLabel;
                 DeviceId = deviceId;
                 LastBackup = lastBackup;
+                this.backupMode = backupMode;
+            }
+            public enum BackupMode
+            {
+                [Description("Light")]
+                Light,
+                [Description("Fast")]
+                Fast,
+                [Description("Single")]
+                Single,
+                [Description("Complex")]
+                Complex
+
             }
         }
 
@@ -134,8 +149,16 @@ namespace UsbBackupper
 
         public UsbInfo this[int index]
         {
-            get => index==-1 ? new UsbInfo("","",Guid.NewGuid(),"") : usbList[index];
-            set => usbList[index] = value;
+            get => index==-1 ? new UsbInfo("","",Guid.NewGuid(),UsbInfo.BackupMode.Fast,"") : usbList[index];
+            set
+            {
+                if (index != -1)
+                {
+                    usbList[index] = value;
+                }
+                Serialize();
+            }
+           
         }
     }
 

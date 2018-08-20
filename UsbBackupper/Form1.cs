@@ -21,12 +21,22 @@ namespace UsbBackupper
 
         private void Watcher_EventArrived(object sender, EventArrivedEventArgs e)
         {
-            var driveLetter = e.NewEvent.Properties["DriveName"].Value.ToString();
-            var driveInfo = listDrives.First(d => d.Name.Contains(driveLetter));
-            var label = driveInfo.VolumeLabel;
-            var usbInfo = usbInfoList.First(usb => usb.VolumeLabel == label);
-            var backupPath = usbInfo.BackupPath;
-            if (!File.Exists(driveLetter + "UsbBackupper.bck"))
+            string driveLetter;
+            DriveInfo driveInfo;
+            string label;
+            UsbInfoList.UsbInfo usbInfo;
+            try
+            {
+                driveLetter = e.NewEvent.Properties["DriveName"].Value.ToString();
+                driveInfo = listDrives.First(d => d.Name.Contains(driveLetter));
+                label = driveInfo.VolumeLabel;
+                usbInfo = usbInfoList.First(usb => usb.VolumeLabel == label);
+                if (!File.Exists(driveLetter + "UsbBackupper.bck"))
+                {
+                    return;
+                }
+            }
+            catch
             {
                 return;
             }
@@ -39,11 +49,12 @@ namespace UsbBackupper
 
             if (id != usbInfo.DeviceId.ToString()) return;
             {
-                try
+                Backup(usbInfo.backupMode, usbInfo, driveInfo);
+                /*try
                 {
                     using (var zip = new ZipFile(backupPath))
                     {
-                        notifyIcon1.ShowBalloonTip(8, "UsbBackupper", "Backup di " + usbInfo.VolumeLabel + " in corso", ToolTipIcon.None);
+                        notifyIcon1.ShowBalloonTip(8, "UsbBackupper", usbInfo.VolumeLabel + "backup in progress", ToolTipIcon.None);
                         Directory.CreateDirectory(backupPath + "\\temp");
                         zip.TempFileFolder = backupPath + "\\temp";
                         zip.AddDirectory(driveInfo.RootDirectory.ToString());
@@ -51,15 +62,15 @@ namespace UsbBackupper
                         zip.Comment = "This zip was created at " + DateTime.Now.ToString("G");
                         var date = DateTime.Now.ToString("dd-MM-yy_hh:mm");
                         zip.Save($"{backupPath}\\{label}-{date}.zip");
-                        usbInfoList[usbInfoList.IndexOf(usbInfo)] = new UsbInfoList.UsbInfo(usbInfo.BackupPath, usbInfo.VolumeLabel, usbInfo.DeviceId, date);
+                        usbInfoList[usbInfoList.IndexOf(usbInfo)] = new UsbInfoList.UsbInfo(usbInfo.BackupPath, usbInfo.VolumeLabel, usbInfo.DeviceId,usbInfo.backupMode,date);
                         usbInfoList.Serialize();
                     }
-                    notifyIcon1.ShowBalloonTip(8, "UsbBackupper", $"Backup di {usbInfo.VolumeLabel} completato", ToolTipIcon.None);
+                    notifyIcon1.ShowBalloonTip(8, "UsbBackupper",usbInfo.VolumeLabel+ "backup completed", ToolTipIcon.None);
                 }
                 catch
                 {
-                    notifyIcon1.ShowBalloonTip(8, "UsbBackupper", "Backup di " + usbInfo.VolumeLabel + " fallito", ToolTipIcon.Error);
-                }
+                    notifyIcon1.ShowBalloonTip(8, "UsbBackupper", usbInfo.VolumeLabel + "backup failed", ToolTipIcon.Error);
+                }*/
 
 
 
@@ -69,7 +80,120 @@ namespace UsbBackupper
             StartDetector();
         }
 
+        public void Backup(UsbInfoList.UsbInfo.BackupMode backupMode, UsbInfoList.UsbInfo usbinfo, DriveInfo driveinfo)
+        {
+            notifyIcon1.ShowBalloonTip(8, "UsbBackupper", usbinfo.VolumeLabel + "backup in progress", ToolTipIcon.None);
+            try
+            {
+                var date = DateTime.Now.ToString("dd-MM-yy_hh:mm");
+                var driveFolders = Directory.GetDirectories(driveinfo.RootDirectory.ToString(), "*",
+                    SearchOption.TopDirectoryOnly).ToList();
+                driveFolders = driveFolders.Where(d => !d.Contains("System Volume Information")).ToList();
+                switch (backupMode)
+                {
+                    case UsbInfoList.UsbInfo.BackupMode.Fast:
+                        {
+                            foreach (string dirPath in driveFolders)
+                            {
+                                Directory.CreateDirectory(dirPath.Replace(driveinfo.RootDirectory.ToString(),
+                                    usbinfo.BackupPath + "\\" + driveinfo.VolumeLabel + date + "\\"));
+                            }
+                            usbInfoList[usbInfoList.IndexOf(usbinfo)] = new UsbInfoList.UsbInfo(usbinfo.BackupPath,
+                                usbinfo.VolumeLabel, usbinfo.DeviceId, usbinfo.backupMode, date);
+                            usbInfoList.Serialize();
+                            break;
+                        }
+                    case UsbInfoList.UsbInfo.BackupMode.Light:
+                        {
 
+                            foreach (string dirPath in driveFolders)
+                            {
+                                Directory.CreateDirectory(dirPath.Replace(driveinfo.RootDirectory.ToString(),
+                                    usbinfo.BackupPath + "\\" + date + "\\"));
+                            }
+                            using (var zip = new ZipFile(usbinfo.BackupPath))
+                            {
+                                Directory.CreateDirectory(usbinfo.BackupPath + "\\temp");
+                                zip.TempFileFolder = usbinfo.BackupPath + "\\temp";
+                                zip.AddDirectory(usbinfo.BackupPath + $"\\{date}\\");
+                                zip.CompressionLevel = CompressionLevel.BestCompression;
+                                zip.Comment = "This zip was created at " + DateTime.Now.ToString("G");
+                                zip.Save($"{usbinfo.BackupPath}\\{driveinfo.VolumeLabel}-{date}.zip");
+                                usbInfoList[usbInfoList.IndexOf(usbinfo)] = new UsbInfoList.UsbInfo(usbinfo.BackupPath,
+                                    usbinfo.VolumeLabel, usbinfo.DeviceId, usbinfo.backupMode, date);
+                                usbInfoList.Serialize();
+                            }
+
+                            break;
+                        }
+                    case UsbInfoList.UsbInfo.BackupMode.Single:
+                        {
+                            Directory.CreateDirectory($"{usbinfo.BackupPath}\\{driveinfo.VolumeLabel}-{date}");
+                            foreach (var directory in driveFolders)
+                            {
+                                using (var zip = new ZipFile(usbinfo.BackupPath))
+                                {
+                                    Directory.CreateDirectory(usbinfo.BackupPath + "\\temp");
+                                    zip.TempFileFolder = usbinfo.BackupPath + "\\temp";
+                                    zip.AddDirectory(directory);
+                                    zip.CompressionLevel = CompressionLevel.BestCompression;
+                                    zip.Comment = "This zip was created at " + DateTime.Now.ToString("G");
+                                    zip.Save($"{usbinfo.BackupPath}\\{driveinfo.VolumeLabel}-{date}\\{directory.Split('\\').Last()}.zip");
+                                    usbInfoList[usbInfoList.IndexOf(usbinfo)] = new UsbInfoList.UsbInfo(usbinfo.BackupPath,
+                                        usbinfo.VolumeLabel, usbinfo.DeviceId, usbinfo.backupMode, date);
+                                    usbInfoList.Serialize();
+                                }
+                            }
+
+                            break;
+                        }
+                    case UsbInfoList.UsbInfo.BackupMode.Complex:
+                        {
+                            var oldZipList = new List<string>();
+                            Directory.CreateDirectory($"{usbinfo.BackupPath}\\{driveinfo.VolumeLabel}-{date}");
+                            foreach (var directory in driveFolders)
+                            {
+                                using (var zip = new ZipFile(usbinfo.BackupPath))
+                                {
+                                    Directory.CreateDirectory(usbinfo.BackupPath + "\\temp");
+                                    zip.TempFileFolder = usbinfo.BackupPath + "\\temp";
+                                    zip.AddDirectory(directory);
+                                    zip.CompressionLevel = CompressionLevel.BestCompression;
+                                    zip.Comment = "This zip was created at " + DateTime.Now.ToString("G");
+                                    zip.Save($"{usbinfo.BackupPath}\\{driveinfo.VolumeLabel}-{date}\\{directory.Split('\\').Last()}.zip");
+                                    oldZipList.Add($"{usbinfo.BackupPath}\\{driveinfo.VolumeLabel}-{date}\\{directory.Split('\\').Last()}.zip");
+                                    usbInfoList[usbInfoList.IndexOf(usbinfo)] = new UsbInfoList.UsbInfo(usbinfo.BackupPath,
+                                        usbinfo.VolumeLabel, usbinfo.DeviceId, usbinfo.backupMode, date);
+                                    usbInfoList.Serialize();
+                                }
+                            }
+                            using (var zip = new ZipFile(usbinfo.BackupPath))
+                            {
+                                Directory.CreateDirectory(usbinfo.BackupPath + "\\temp");
+                                zip.TempFileFolder = usbinfo.BackupPath + "\\temp";
+                                zip.AddDirectory($"{usbinfo.BackupPath}\\{driveinfo.VolumeLabel}-{date}");
+                                zip.CompressionLevel = CompressionLevel.BestCompression;
+                                zip.Comment = "This zip was created at " + DateTime.Now.ToString("G");
+                                zip.Save($"{usbinfo.BackupPath}\\{driveinfo.VolumeLabel}-{date}\\{driveinfo.VolumeLabel}-{date}.zip");
+                                usbInfoList[usbInfoList.IndexOf(usbinfo)] = new UsbInfoList.UsbInfo(usbinfo.BackupPath,
+                                    usbinfo.VolumeLabel, usbinfo.DeviceId, usbinfo.backupMode, date);
+                                usbInfoList.Serialize();
+                            }
+
+                            foreach (var oldZip in oldZipList)
+                            {
+                                File.Delete(oldZip);
+                            }
+                            break;
+                        }
+                }
+                notifyIcon1.ShowBalloonTip(8, "UsbBackupper", usbinfo.VolumeLabel + "backup completed", ToolTipIcon.None);
+            }
+            catch
+            {
+                notifyIcon1.ShowBalloonTip(8, "UsbBackupper", usbinfo.VolumeLabel + "backup failed", ToolTipIcon.None);
+            }
+        }
 
         private void aggiungiToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -104,9 +228,9 @@ namespace UsbBackupper
                 Process.Start(linkLabelDeviceBackupPath.Tag.ToString());
 
             }
-            catch 
+            catch
             {
-                
+
             }
         }
 
@@ -142,12 +266,34 @@ namespace UsbBackupper
 
         private void listBoxDevices_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (listBoxDevices.SelectedIndex == -1)
+            {
+                labelDeviceName.Text =
+                    linkLabelDeviceBackupPath.Text =
+                        labelDeviceLastBackup.Text = "";
+                groupBox1.Visible = false;
+            }
             var usbinfo = usbInfoList[listBoxDevices.SelectedIndex];
-
+            groupBox1.Visible = true;
             labelDeviceName.Text = usbinfo.VolumeLabel;
-            linkLabelDeviceBackupPath.Text = "Percorso di backup:" + usbinfo.BackupPath;
+            linkLabelDeviceBackupPath.Text = "Backup path:" + usbinfo.BackupPath;
             linkLabelDeviceBackupPath.Tag = usbinfo.BackupPath;
-            labelDeviceLastBackup.Text = "Ultimo backup:" + usbinfo.LastBackup;
+            labelDeviceLastBackup.Text = "Last backup:" + usbinfo.LastBackup;
+            switch (usbinfo.backupMode)
+            {
+                case UsbInfoList.UsbInfo.BackupMode.Light:
+                    radioButtonLight.Checked = true;
+                    break;
+                case UsbInfoList.UsbInfo.BackupMode.Fast:
+                    radioButtonFast.Checked = true;
+                    break;
+                case UsbInfoList.UsbInfo.BackupMode.Single:
+                    radioButtonSingle.Checked = true;
+                    break;
+                case UsbInfoList.UsbInfo.BackupMode.Complex:
+                    radioButtonComplex.Checked = true;
+                    break;
+            }
         }
 
         private void rimuoviToolStripMenuItem_Click(object sender, EventArgs e)
@@ -159,6 +305,34 @@ namespace UsbBackupper
             {
                 listBoxDevices.Items.Add(usbs.VolumeLabel);
             }
+        }
+
+        private void radioButtonFast_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!radioButtonFast.Checked) return;
+            var info = usbInfoList[listBoxDevices.SelectedIndex];
+            usbInfoList[listBoxDevices.SelectedIndex] = new UsbInfoList.UsbInfo(info.BackupPath, info.VolumeLabel, info.DeviceId, UsbInfoList.UsbInfo.BackupMode.Fast, info.LastBackup);
+        }
+
+        private void radioButtonLight_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!radioButtonLight.Checked) return;
+            var info = usbInfoList[listBoxDevices.SelectedIndex];
+            usbInfoList[listBoxDevices.SelectedIndex] = new UsbInfoList.UsbInfo(info.BackupPath, info.VolumeLabel, info.DeviceId, UsbInfoList.UsbInfo.BackupMode.Light, info.LastBackup);
+        }
+
+        private void radioButtonSingle_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!radioButtonSingle.Checked) return;
+            var info = usbInfoList[listBoxDevices.SelectedIndex];
+            usbInfoList[listBoxDevices.SelectedIndex] = new UsbInfoList.UsbInfo(info.BackupPath, info.VolumeLabel, info.DeviceId, UsbInfoList.UsbInfo.BackupMode.Single, info.LastBackup);
+        }
+
+        private void radioButtonComplex_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!radioButtonComplex.Checked) return;
+            var info = usbInfoList[listBoxDevices.SelectedIndex];
+            usbInfoList[listBoxDevices.SelectedIndex] = new UsbInfoList.UsbInfo(info.BackupPath, info.VolumeLabel, info.DeviceId, UsbInfoList.UsbInfo.BackupMode.Complex, info.LastBackup);
         }
     }
 }
