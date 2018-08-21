@@ -99,7 +99,7 @@ namespace UsbBackupper
                                 zip.CompressionLevel = CompressionLevel.BestCompression;
                                 zip.UseZip64WhenSaving = Zip64Option.AsNecessary;
                                 zip.Comment = "This zip was created at " + DateTime.Now.ToString("G");
-                                zip.Save($"{usbinfo.BackupPath}\\{driveinfo.VolumeLabel}-{date}.zip");
+                                zip.Save($"{usbinfo.BackupPath}\\{driveinfo.VolumeLabel}-{date}\\{driveinfo.VolumeLabel}-{date}.zip");
                                 usbInfoList[usbInfoList.IndexOf(usbinfo)] = new UsbInfoList.UsbInfo(usbinfo.BackupPath,
                                     usbinfo.VolumeLabel, usbinfo.DeviceId, usbinfo.backupMode, date);
                                 usbInfoList.Serialize();
