@@ -68,7 +68,7 @@ namespace UsbBackupper
             notifyIcon1.ShowBalloonTip(8, "UsbBackupper", usbinfo.VolumeLabel + " backup in progress", ToolTipIcon.None);
             try
             {
-                var date = DateTime.Now.ToString("dd-MM-yy_hh:mm");
+                var date = DateTime.UtcNow.ToString("dd-MM-yy_hh:mm");
                 var driveFolders = Directory.GetDirectories(driveinfo.RootDirectory.ToString()).ToList();
                 var driveFile = Directory.GetFiles(driveinfo.RootDirectory.ToString(), "*",
                     SearchOption.TopDirectoryOnly);
@@ -77,23 +77,6 @@ namespace UsbBackupper
                 {
                     case UsbInfoList.UsbInfo.BackupMode.Fast:
                         {
-
-                            /*{
-                                Directory.CreateDirectory(dirPath.Replace(driveinfo.RootDirectory.ToString(),
-                                    usbinfo.BackupPath + "\\" + driveinfo.VolumeLabel + date + "\\"));
-
-                                foreach (string newPath in Directory.GetFiles(dirPath, "*.*",
-                                    SearchOption.AllDirectories))
-                                {
-                                    if (!File.Exists(newPath.Replace(dirPath, usbinfo.BackupPath + '\\' + driveinfo.VolumeLabel + date + '\\')))
-                                    {
-                                        var backnfp = newPath.Replace(dirPath, usbinfo.BackupPath + '\\' + driveinfo.VolumeLabel + date + '\\');
-
-                                        Directory.CreateDirectory(newPath.Replace(dirPath, usbinfo.BackupPath + '\\' + driveinfo.VolumeLabel + date + '\\'));
-                                    }
-                                    File.Copy(newPath, newPath.Replace(dirPath, usbinfo.BackupPath + '\\' + driveinfo.VolumeLabel + date + '\\'), true);
-                                }
-                            }*/
                             Directory.CreateDirectory(usbinfo.BackupPath + $"\\{driveinfo.VolumeLabel}-{date}");
                             Helper.CopyFilesRecursively(new DirectoryInfo(driveinfo.RootDirectory.ToString()),
                                 new DirectoryInfo(usbinfo.BackupPath + $"\\{driveinfo.VolumeLabel}-{date}"));
@@ -215,9 +198,9 @@ namespace UsbBackupper
                 }
                 notifyIcon1.ShowBalloonTip(8, "UsbBackupper", usbinfo.VolumeLabel + " backup completed", ToolTipIcon.None);
             }
-            catch
+            catch(Exception e)
             {
-                notifyIcon1.ShowBalloonTip(8, "UsbBackupper", usbinfo.VolumeLabel + " backup failed", ToolTipIcon.None);
+                notifyIcon1.ShowBalloonTip(8, "UsbBackupper", usbinfo.VolumeLabel + " backup failed\n"+e.Message, ToolTipIcon.Error);
             }
         }
 
@@ -288,6 +271,7 @@ namespace UsbBackupper
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             Show();
+            WindowState = FormWindowState.Normal;
         }
 
         private void listBoxDevices_SelectedIndexChanged(object sender, EventArgs e)
