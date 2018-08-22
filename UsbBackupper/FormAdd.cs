@@ -30,7 +30,7 @@ namespace UsbBackupper
                 InitialDelay = 1000,
                 ReshowDelay = 500
             };
-            toolTip1.SetToolTip(radioButtonFast,"Copy the entire folder of the drive");
+            toolTip1.SetToolTip(radioButtonFast, "Copy the entire folder of the drive");
             toolTip1.SetToolTip(radioButtonLight, "Compress the entire folder of the drive in one zip");
             toolTip1.SetToolTip(radioButtonSingle, "Compress the single folders of the drive in multiple zip");
             toolTip1.SetToolTip(radioButtonComplex, "Compress the single folders of the device and then compress in a single zip");
@@ -54,39 +54,53 @@ namespace UsbBackupper
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            var drive = listDrives.First(d => d.VolumeLabel == comboBoxDevice.Text);
-            var volumeLabel = drive.VolumeLabel;
-            if (textBoxBackupPath.Text.Last()!='\\')
+            if (string.IsNullOrWhiteSpace(comboBoxDevice.Text) || string.IsNullOrWhiteSpace(textBoxBackupPath.Text))
             {
-                textBoxBackupPath.Text += '\\';
-            }
-            var backupPath = textBoxBackupPath.Text +$@"{volumeLabel}-Backup";
-            Directory.CreateDirectory(backupPath);
-            var deviceRoot = drive.RootDirectory;
-            var id=Guid.NewGuid();
-            using (var stream=new StreamWriter(deviceRoot+"\\UsbBackupper.bck"))
-            {
-                stream.WriteLine(id.ToString("D"));
-                stream.Close();
+                return;
             }
 
-            UsbInfoList.UsbInfo.BackupMode mode;
-            if (radioButtonFast.Checked)
+            try
             {
-                mode = UsbInfoList.UsbInfo.BackupMode.Fast;
-            }else if (radioButtonLight.Checked)
-            {
-                mode = UsbInfoList.UsbInfo.BackupMode.Light;
-            }else if (radioButtonSingle.Checked)
-            {
-                mode = UsbInfoList.UsbInfo.BackupMode.Single;
+                var drive = listDrives.First(d => d.VolumeLabel == comboBoxDevice.Text);
+                var volumeLabel = drive.VolumeLabel;
+                if (textBoxBackupPath.Text.Last() != '\\')
+                {
+                    textBoxBackupPath.Text += '\\';
+                }
+                var backupPath = textBoxBackupPath.Text + $@"{volumeLabel}-Backup";
+                Directory.CreateDirectory(backupPath);
+                var deviceRoot = drive.RootDirectory;
+                var id = Guid.NewGuid();
+                using (var stream = new StreamWriter(deviceRoot + "\\UsbBackupper.bck"))
+                {
+                    stream.WriteLine(id.ToString("D"));
+                    stream.Close();
+                }
+
+                UsbInfoList.UsbInfo.BackupMode mode;
+                if (radioButtonFast.Checked)
+                {
+                    mode = UsbInfoList.UsbInfo.BackupMode.Fast;
+                }
+                else if (radioButtonLight.Checked)
+                {
+                    mode = UsbInfoList.UsbInfo.BackupMode.Light;
+                }
+                else if (radioButtonSingle.Checked)
+                {
+                    mode = UsbInfoList.UsbInfo.BackupMode.Single;
+                }
+                else
+                {
+                    mode = UsbInfoList.UsbInfo.BackupMode.Complex;
+                }
+                usbInfoList.Add(new UsbInfoList.UsbInfo(backupPath, volumeLabel, id, mode));
+                Close();
             }
-            else
+            catch
             {
-                mode = UsbInfoList.UsbInfo.BackupMode.Complex;
+
             }
-            usbInfoList.Add(new UsbInfoList.UsbInfo(backupPath, volumeLabel,id,mode));
-            Close();
         }
     }
 }

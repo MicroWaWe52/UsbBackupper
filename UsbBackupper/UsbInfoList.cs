@@ -133,14 +133,12 @@ namespace UsbBackupper
         public int IndexOf(UsbInfo item)
         {
             return usbList.IndexOf(item);
-
         }
 
         public void Insert(int index, UsbInfo item)
         {
             usbList.Insert(index, item);
             Serialize();
-
         }
 
         public void RemoveAt(int index)

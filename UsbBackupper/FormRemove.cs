@@ -21,14 +21,18 @@ namespace UsbBackupper
             {
                 comboBoxRemove.Items.Add(usb.VolumeLabel);
             }
+
+            if (comboBoxRemove.Items.Count < 1) return;
+            comboBoxRemove.SelectedIndex = 0;
         }
 
         private void buttonRemove_Click(object sender, EventArgs e)
         {
-            var deletedDrive = usbInfoList[comboBoxRemove.SelectedIndex];
-            usbInfoList.RemoveAt(comboBoxRemove.SelectedIndex);
             try
             {
+                var deletedDrive = usbInfoList[comboBoxRemove.SelectedIndex];
+                usbInfoList.RemoveAt(comboBoxRemove.SelectedIndex);
+
                 if (checkBoxRemoveDelete.Checked)
                 {
                     Task.Factory.StartNew(() => { Directory.Delete(deletedDrive.BackupPath, true); });
@@ -45,13 +49,12 @@ namespace UsbBackupper
                     Close();
                 }
 
-                Close();
             }
             catch (DirectoryNotFoundException)
             {
                 MessageBox.Show("Impossibile cancellare i backup\nprobabilmente sono gia stati eliminati");
+                Close();
             }
-            finally { Close(); }
 
         }
     }
