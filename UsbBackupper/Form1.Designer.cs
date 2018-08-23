@@ -48,6 +48,7 @@
             this.radioButtonFast = new System.Windows.Forms.RadioButton();
             this.buttonBackNow = new System.Windows.Forms.Button();
             this.checkBoxAutoBackup = new System.Windows.Forms.CheckBox();
+            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -56,7 +57,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.dispositiviToolStripMenuItem});
+            this.dispositiviToolStripMenuItem,
+            this.settingsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(800, 24);
@@ -75,14 +77,14 @@
             // aggiungiToolStripMenuItem
             // 
             this.aggiungiToolStripMenuItem.Name = "aggiungiToolStripMenuItem";
-            this.aggiungiToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.aggiungiToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.aggiungiToolStripMenuItem.Text = "Add";
             this.aggiungiToolStripMenuItem.Click += new System.EventHandler(this.aggiungiToolStripMenuItem_Click);
             // 
             // rimuoviToolStripMenuItem
             // 
             this.rimuoviToolStripMenuItem.Name = "rimuoviToolStripMenuItem";
-            this.rimuoviToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.rimuoviToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.rimuoviToolStripMenuItem.Text = "Remove";
             this.rimuoviToolStripMenuItem.Click += new System.EventHandler(this.rimuoviToolStripMenuItem_Click);
             // 
@@ -229,6 +231,13 @@
             this.checkBoxAutoBackup.Visible = false;
             this.checkBoxAutoBackup.CheckedChanged += new System.EventHandler(this.checkBoxAutoBackup_CheckedChanged);
             // 
+            // settingsToolStripMenuItem
+            // 
+            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.settingsToolStripMenuItem.Text = "Settings";
+            this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -278,6 +287,7 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.Button buttonBackNow;
         private System.Windows.Forms.CheckBox checkBoxAutoBackup;
+        private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
     }
 }
 

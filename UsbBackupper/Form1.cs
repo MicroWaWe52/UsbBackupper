@@ -198,9 +198,9 @@ namespace UsbBackupper
                 }
                 notifyIcon1.ShowBalloonTip(8, "UsbBackupper", usbinfo.VolumeLabel + " backup completed", ToolTipIcon.None);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                notifyIcon1.ShowBalloonTip(8, "UsbBackupper", usbinfo.VolumeLabel + " backup failed\n"+e.Message, ToolTipIcon.Error);
+                notifyIcon1.ShowBalloonTip(8, "UsbBackupper", usbinfo.VolumeLabel + " backup failed\n" + e.Message, ToolTipIcon.Error);
             }
         }
 
@@ -399,6 +399,11 @@ namespace UsbBackupper
                 var drive = listDrives.First(d => d.VolumeLabel == info.VolumeLabel);
                 Backup(info.backupMode, info, drive);
             });
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new FormSettings().ShowDialog();
         }
     }
 }
