@@ -1,6 +1,6 @@
 ﻿namespace UsbBackupper
 {
-    partial class Form1
+    partial class FormHome
     {
         /// <summary>
         /// Variabile di progettazione necessaria.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHome));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.dispositiviToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aggiungiToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();

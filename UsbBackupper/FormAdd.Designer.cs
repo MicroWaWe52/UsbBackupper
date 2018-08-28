@@ -36,10 +36,11 @@
             this.buttonAdd = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButtonFast = new System.Windows.Forms.RadioButton();
-            this.radioButtonLight = new System.Windows.Forms.RadioButton();
-            this.radioButtonSingle = new System.Windows.Forms.RadioButton();
             this.radioButtonComplex = new System.Windows.Forms.RadioButton();
+            this.radioButtonSingle = new System.Windows.Forms.RadioButton();
+            this.radioButtonLight = new System.Windows.Forms.RadioButton();
+            this.radioButtonFast = new System.Windows.Forms.RadioButton();
+            this.checkBoxBackCloud = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -121,28 +122,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Backup mode";
             // 
-            // radioButtonFast
+            // radioButtonComplex
             // 
-            this.radioButtonFast.AutoSize = true;
-            this.radioButtonFast.Checked = true;
-            this.radioButtonFast.Location = new System.Drawing.Point(7, 20);
-            this.radioButtonFast.Name = "radioButtonFast";
-            this.radioButtonFast.Size = new System.Drawing.Size(45, 17);
-            this.radioButtonFast.TabIndex = 0;
-            this.radioButtonFast.TabStop = true;
-            this.radioButtonFast.Text = "Fast";
-            this.radioButtonFast.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonLight
-            // 
-            this.radioButtonLight.AutoSize = true;
-            this.radioButtonLight.Location = new System.Drawing.Point(7, 43);
-            this.radioButtonLight.Name = "radioButtonLight";
-            this.radioButtonLight.Size = new System.Drawing.Size(48, 17);
-            this.radioButtonLight.TabIndex = 1;
-            this.radioButtonLight.TabStop = true;
-            this.radioButtonLight.Text = "Light";
-            this.radioButtonLight.UseVisualStyleBackColor = true;
+            this.radioButtonComplex.AutoSize = true;
+            this.radioButtonComplex.Location = new System.Drawing.Point(7, 87);
+            this.radioButtonComplex.Name = "radioButtonComplex";
+            this.radioButtonComplex.Size = new System.Drawing.Size(65, 17);
+            this.radioButtonComplex.TabIndex = 3;
+            this.radioButtonComplex.TabStop = true;
+            this.radioButtonComplex.Text = "Complex";
+            this.radioButtonComplex.UseVisualStyleBackColor = true;
             // 
             // radioButtonSingle
             // 
@@ -155,22 +144,46 @@
             this.radioButtonSingle.Text = "Single Folder";
             this.radioButtonSingle.UseVisualStyleBackColor = true;
             // 
-            // radioButtonComplex
+            // radioButtonLight
             // 
-            this.radioButtonComplex.AutoSize = true;
-            this.radioButtonComplex.Location = new System.Drawing.Point(7, 87);
-            this.radioButtonComplex.Name = "radioButtonComplex";
-            this.radioButtonComplex.Size = new System.Drawing.Size(65, 17);
-            this.radioButtonComplex.TabIndex = 3;
-            this.radioButtonComplex.TabStop = true;
-            this.radioButtonComplex.Text = "Complex";
-            this.radioButtonComplex.UseVisualStyleBackColor = true;
+            this.radioButtonLight.AutoSize = true;
+            this.radioButtonLight.Location = new System.Drawing.Point(7, 43);
+            this.radioButtonLight.Name = "radioButtonLight";
+            this.radioButtonLight.Size = new System.Drawing.Size(48, 17);
+            this.radioButtonLight.TabIndex = 1;
+            this.radioButtonLight.TabStop = true;
+            this.radioButtonLight.Text = "Light";
+            this.radioButtonLight.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonFast
+            // 
+            this.radioButtonFast.AutoSize = true;
+            this.radioButtonFast.Checked = true;
+            this.radioButtonFast.Location = new System.Drawing.Point(7, 20);
+            this.radioButtonFast.Name = "radioButtonFast";
+            this.radioButtonFast.Size = new System.Drawing.Size(45, 17);
+            this.radioButtonFast.TabIndex = 0;
+            this.radioButtonFast.TabStop = true;
+            this.radioButtonFast.Text = "Fast";
+            this.radioButtonFast.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxBackCloud
+            // 
+            this.checkBoxBackCloud.AutoSize = true;
+            this.checkBoxBackCloud.Enabled = false;
+            this.checkBoxBackCloud.Location = new System.Drawing.Point(218, 119);
+            this.checkBoxBackCloud.Name = "checkBoxBackCloud";
+            this.checkBoxBackCloud.Size = new System.Drawing.Size(108, 17);
+            this.checkBoxBackCloud.TabIndex = 10;
+            this.checkBoxBackCloud.Text = "Backup on Cloud";
+            this.checkBoxBackCloud.UseVisualStyleBackColor = true;
             // 
             // FormAdd
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 259);
+            this.Controls.Add(this.checkBoxBackCloud);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonAdd);
@@ -203,5 +216,6 @@
         private System.Windows.Forms.RadioButton radioButtonSingle;
         private System.Windows.Forms.RadioButton radioButtonLight;
         private System.Windows.Forms.RadioButton radioButtonFast;
+        private System.Windows.Forms.CheckBox checkBoxBackCloud;
     }
 }

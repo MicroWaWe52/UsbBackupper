@@ -5,10 +5,10 @@
     <Setting Name="Ip" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="usern" Type="System.String" Scope="User">
+    <Setting Name="Usern" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="passw" Type="System.String" Scope="User">
+    <Setting Name="Passw" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>

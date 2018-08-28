@@ -25,9 +25,9 @@ namespace UsbBackupper
                 request.GetResponse();
                 MessageBox.Show("Successful connection and setup ");
             }
-            catch
+            catch (Exception exx)
             {
-                MessageBox.Show("Connection failed");
+                MessageBox.Show("Connection failed \nIf \"UsbBackupper\" path is present on the server, try to delete it");
             }
         }
 
@@ -37,15 +37,15 @@ namespace UsbBackupper
             listBoxSettings.SelectedIndex = 0;
             panels[listBoxSettings.SelectedIndex].BringToFront();
             textBoxIp.Text = Settings.Default.Ip;
-            textBoxUsern.Text = Settings.Default.usern;
-            textBoxPassw.Text = Settings.Default.passw;
+            textBoxUsern.Text = Settings.Default.Usern;
+            textBoxPassw.Text = Settings.Default.Passw;
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            Settings.Default.Ip = textBoxIp.Text;
-            Settings.Default.usern = textBoxUsern.Text;
-            Settings.Default.passw = textBoxPassw.Text;
+            Settings.Default.Ip = textBoxIp.Text+ "/UsbBackupper";
+            Settings.Default.Usern = textBoxUsern.Text;
+            Settings.Default.Passw = textBoxPassw.Text;
             Settings.Default.Save();
         }
     }

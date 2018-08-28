@@ -53,7 +53,7 @@ namespace UsbBackupper
 
             var driveFolders = source.GetDirectories().ToList();
             driveFolders = driveFolders.Where(d => !d.FullName.Contains("System Volume Information")).ToList();
-            foreach (DirectoryInfo dir in driveFolders)
+            foreach (var dir in driveFolders)
             {
                 CopyFilesRecursively(dir, target.CreateSubdirectory(dir.Name));
             }

@@ -34,7 +34,11 @@ namespace UsbBackupper
             toolTip1.SetToolTip(radioButtonLight, "Compress the entire folder of the drive in one zip");
             toolTip1.SetToolTip(radioButtonSingle, "Compress the single folders of the drive in multiple zip");
             toolTip1.SetToolTip(radioButtonComplex, "Compress the single folders of the device and then compress in a single zip");
-
+            if (Properties.Settings.Default.Ip!="")
+            {
+                checkBoxBackCloud.Enabled = true;
+            }
+           
         }
 
         private void buttonBackupPath_Click(object sender, EventArgs e)
@@ -77,24 +81,24 @@ namespace UsbBackupper
                     stream.Close();
                 }
 
-                UsbInfoList.UsbInfo.BackupMode mode;
+                UsbInfoList.UsbInfo.backupMode mode;
                 if (radioButtonFast.Checked)
                 {
-                    mode = UsbInfoList.UsbInfo.BackupMode.Fast;
+                    mode = UsbInfoList.UsbInfo.backupMode.Fast;
                 }
                 else if (radioButtonLight.Checked)
                 {
-                    mode = UsbInfoList.UsbInfo.BackupMode.Light;
+                    mode = UsbInfoList.UsbInfo.backupMode.Light;
                 }
                 else if (radioButtonSingle.Checked)
                 {
-                    mode = UsbInfoList.UsbInfo.BackupMode.Single;
+                    mode = UsbInfoList.UsbInfo.backupMode.Single;
                 }
                 else
                 {
-                    mode = UsbInfoList.UsbInfo.BackupMode.Complex;
+                    mode = UsbInfoList.UsbInfo.backupMode.Complex;
                 }
-                usbInfoList.Add(new UsbInfoList.UsbInfo(backupPath, volumeLabel, id, mode));
+                usbInfoList.Add(new UsbInfoList.UsbInfo(backupPath, volumeLabel, id, mode,checkBoxBackCloud.Checked));
                 Close();
             }
             catch

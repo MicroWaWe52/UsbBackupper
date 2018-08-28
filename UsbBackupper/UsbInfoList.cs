@@ -20,18 +20,20 @@ namespace UsbBackupper
             public string VolumeLabel;
             public Guid DeviceId;
             public string LastBackup;
-            public BackupMode backupMode;
+            public backupMode BackupMode;
             public bool CanAutoBackup;
-            public UsbInfo(string backupPath, string volumeLabel, Guid deviceId, BackupMode backupMode,string lastBackup = "Mai",bool canAuto=true)
+            public bool BackOnCloud;
+            public UsbInfo(string backupPath, string volumeLabel, Guid deviceId, backupMode backupMode, bool backOnCloud, string lastBackup = "Mai",bool canAuto=true)
             {
                 BackupPath = backupPath;
                 VolumeLabel = volumeLabel;
                 DeviceId = deviceId;
                 LastBackup = lastBackup;
-                this.backupMode = backupMode;
+                BackupMode = backupMode;
+                BackOnCloud = backOnCloud;
                 CanAutoBackup = canAuto;
             }
-            public enum BackupMode
+            public enum backupMode
             {
                 [Description("Light")]
                 Light,
@@ -149,7 +151,7 @@ namespace UsbBackupper
 
         public UsbInfo this[int index]
         {
-            get => index==-1 ? new UsbInfo("","",Guid.NewGuid(),UsbInfo.BackupMode.Fast,"") : usbList[index];
+            get => index==-1 ? new UsbInfo("","",Guid.NewGuid(),UsbInfo.backupMode.Fast,false,"") : usbList[index];
             set
             {
                 if (index != -1)

@@ -44,6 +44,10 @@ namespace UsbBackupper
                 {
                     File.Delete(drives.First(drive => drive.VolumeLabel == deletedDrive.VolumeLabel).RootDirectory + "UsbBackupper.bck");
                 }
+                catch
+                {
+                    // ignored
+                }
                 finally
                 {
                     Close();

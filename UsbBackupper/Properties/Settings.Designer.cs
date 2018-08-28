@@ -38,24 +38,24 @@ namespace UsbBackupper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string usern {
+        public string Usern {
             get {
-                return ((string)(this["usern"]));
+                return ((string)(this["Usern"]));
             }
             set {
-                this["usern"] = value;
+                this["Usern"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string passw {
+        public string Passw {
             get {
-                return ((string)(this["passw"]));
+                return ((string)(this["Passw"]));
             }
             set {
-                this["passw"] = value;
+                this["Passw"] = value;
             }
         }
     }
