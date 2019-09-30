@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using IWshRuntimeLibrary;
+using Microsoft.Experimental.IO;
+using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Management;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.Experimental.IO;
 
 namespace UsbBackupper
 {
@@ -17,26 +12,17 @@ namespace UsbBackupper
     {
         public static void CreateShortCut()
         {
-            Type t = Type.GetTypeFromCLSID(new Guid("72C24DD5-D70A-438B-8A42-98424B88AFB8")); //Windows Script Host Shell Object
-            dynamic shell = Activator.CreateInstance(t);
-            try
-            {
-                var lnk = shell.CreateShortcut(Environment.GetFolderPath(Environment.SpecialFolder.Startup) + "\\UsbBackupper.lnk");
-                try
-                {
-                    lnk.TargetPath = Application.StartupPath + "\\" + System.Reflection.Assembly.GetExecutingAssembly().GetName().Name + ".exe";
-                    lnk.IconLocation = "shell32.dll, 1";
-                    lnk.Save();
-                }
-                finally
-                {
-                    Marshal.FinalReleaseComObject(lnk);
-                }
-            }
-            finally
-            {
-                Marshal.FinalReleaseComObject(shell);
-            }
+
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.Startup) + @"\Backupper.lnk";
+            WshShell wsh = new IWshRuntimeLibrary.WshShell();
+            IWshShortcut shortcut = wsh.CreateShortcut(path) as IWshShortcut;
+            shortcut.Arguments = "";
+            shortcut.TargetPath = Environment.CurrentDirectory + @"\UsbBackupper.exe";
+            shortcut.WindowStyle = 1;
+            shortcut.Description = "backupper";
+            shortcut.WorkingDirectory = Environment.CurrentDirectory + @"\";
+            shortcut.Save();
+
         }
         public static string GetCustomDescription(object objEnum)
         {

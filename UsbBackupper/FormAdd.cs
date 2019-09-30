@@ -81,22 +81,22 @@ namespace UsbBackupper
                     stream.Close();
                 }
 
-                UsbInfoList.UsbInfo.backupMode mode;
+                UsbInfoList.UsbInfo.BackupMode mode;
                 if (radioButtonFast.Checked)
                 {
-                    mode = UsbInfoList.UsbInfo.backupMode.Fast;
+                    mode = UsbInfoList.UsbInfo.BackupMode.Fast;
                 }
                 else if (radioButtonLight.Checked)
                 {
-                    mode = UsbInfoList.UsbInfo.backupMode.Light;
+                    mode = UsbInfoList.UsbInfo.BackupMode.Light;
                 }
                 else if (radioButtonSingle.Checked)
                 {
-                    mode = UsbInfoList.UsbInfo.backupMode.Single;
+                    mode = UsbInfoList.UsbInfo.BackupMode.Single;
                 }
                 else
                 {
-                    mode = UsbInfoList.UsbInfo.backupMode.Complex;
+                    mode = UsbInfoList.UsbInfo.BackupMode.Complex;
                 }
                 usbInfoList.Add(new UsbInfoList.UsbInfo(backupPath, volumeLabel, id, mode,checkBoxBackCloud.Checked));
                 Close();
