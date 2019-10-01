@@ -70,7 +70,7 @@ namespace UsbBackupper
             notifyIcon1.ShowBalloonTip(8, "UsbBackupper", usbinfo.VolumeLabel + " backup in progress", ToolTipIcon.None);
             try
             {
-                var date = DateTime.UtcNow.ToString("dd-MM-yy_hh:mm");
+                var date = DateTime.Now.ToString("dd-MM-yy_hh_mm");
                 var driveFolders = Directory.GetDirectories(driveinfo.RootDirectory.ToString()).ToList();
                 var driveFile = Directory.GetFiles(driveinfo.RootDirectory.ToString(), "*",
                     SearchOption.TopDirectoryOnly);
@@ -81,13 +81,14 @@ namespace UsbBackupper
                 {
                     if (!usbinfo.BackOnCloud) return;
                     ftpClient = new Ftp(Settings.Default.Ip, Settings.Default.Usern, Settings.Default.Passw);
-                    ftpClient.CreateDirectory($"/{backupPathNow.Split('\\').Last()}");
-                    Upload(backupPathNow, Settings.Default.Ip + $"/{backupPathNow.Split('\\').Last()}");
+                    ftpClient.CreateDirectory($"{backupPathNow.Split('\\').Last().Replace(':', '_')}");
+                    Upload(driveinfo.RootDirectory.ToString(), Settings.Default.Ip + $"/{backupPathNow.Split('\\').Last().Replace(':', '_')}");
                 });
                 switch (backupMode)
                 {
                     case UsbInfoList.UsbInfo.BackupMode.Fast:
                         {
+                            var path = usbinfo.BackupPath + $"\\{driveinfo.VolumeLabel}-{date}";
                             Directory.CreateDirectory(usbinfo.BackupPath + $"\\{driveinfo.VolumeLabel}-{date}");
                             Helper.CopyFilesRecursively(new DirectoryInfo(driveinfo.RootDirectory.ToString()),
                                 new DirectoryInfo(usbinfo.BackupPath + $"\\{driveinfo.VolumeLabel}-{date}"));
@@ -206,6 +207,7 @@ namespace UsbBackupper
                             }
                             break;
                         }
+
                 }
                 notifyIcon1.ShowBalloonTip(8, "UsbBackupper", usbinfo.VolumeLabel + " backup completed", ToolTipIcon.None);
 
@@ -283,17 +285,17 @@ namespace UsbBackupper
         private Ftp ftpClient;
         public void Upload(string dirPath, string uploadPath)
         {
-            string[] files = Directory.GetFiles(dirPath, "*.*");
-            string[] subDirs = Directory.GetDirectories(dirPath);
+            var files = Directory.GetFiles(dirPath, "*.*");
+            var subDirs = Directory.GetDirectories(dirPath);
 
-            foreach (string file in files)
+            foreach (var file in files)
             {
                 ftpClient.Upload(uploadPath + "/" + Path.GetFileName(file), file);
             }
 
-            foreach (string subDir in subDirs)
+            foreach (var subDir in subDirs)
             {
-                ftpClient.CreateDirectory(uploadPath + "/" + Path.GetFileName(subDir));
+                ftpClient.CreateDirectoryUpload(uploadPath + "/" + Path.GetFileName(subDir));
                 Upload(subDir, uploadPath + "/" + Path.GetFileName(subDir));
             }
         }

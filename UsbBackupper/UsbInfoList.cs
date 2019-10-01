@@ -7,11 +7,9 @@ using System.Xml.Serialization;
 
 namespace UsbBackupper
 {
-    public class UsbInfoList : ICollection<UsbInfoList.UsbInfo>, IList<UsbInfoList.UsbInfo>
+    public class UsbInfoList : IList<UsbInfoList.UsbInfo>
     {
         private readonly List<UsbInfo> usbList = new List<UsbInfo>();
-        public UsbInfoList() { }
-
 
 
         public struct UsbInfo
@@ -49,10 +47,7 @@ namespace UsbBackupper
 
         public IEnumerator<UsbInfo> GetEnumerator()
         {
-            foreach (var item in usbList)
-            {
-                yield return item;
-            }
+            return ((IEnumerable<UsbInfo>) usbList).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -107,8 +102,8 @@ namespace UsbBackupper
             }
             catch
             {
+                // ignored
             }
-
         }
 
         public static UsbInfoList Deserialize()

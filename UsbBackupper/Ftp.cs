@@ -71,36 +71,10 @@ namespace UsbBackupper
             try
             {
                 /* Create an FTP Request */
-                ftpRequest = (FtpWebRequest)FtpWebRequest.Create(remoteFile);
-                /* Log in to the FTP Server with the User Name and Password Provided */
-                ftpRequest.Credentials = new NetworkCredential(user, pass);
-                /* When in doubt, use these options */
-                ftpRequest.UseBinary = true;
-                ftpRequest.UsePassive = true;
-                ftpRequest.KeepAlive = true;
-                /* Specify the Type of FTP Request */
-                ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
-                /* Establish Return Communication with the FTP Server */
-                ftpStream = ftpRequest.GetRequestStream();
-                /* Open a File Stream to Read the File for Upload */
-                FileStream localFileStream = new FileStream(localFile, FileMode.Create);
-                /* Buffer for the Downloaded Data */
-                byte[] byteBuffer = new byte[bufferSize];
-                int bytesSent = localFileStream.Read(byteBuffer, 0, bufferSize);
-                /* Upload the File by Sending the Buffered Data Until the Transfer is Complete */
-                try
-                {
-                    while (bytesSent != 0)
-                    {
-                        ftpStream.Write(byteBuffer, 0, bytesSent);
-                        bytesSent = localFileStream.Read(byteBuffer, 0, bufferSize);
-                    }
-                }
-                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
-                /* Resource Cleanup */
-                localFileStream.Close();
-                ftpStream.Close();
-                ftpRequest = null;
+                WebClient client = new WebClient();
+                client.Credentials = new NetworkCredential(user, pass);
+                client.UploadFile(
+                    remoteFile, localFile);
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
             return;
@@ -164,23 +138,25 @@ namespace UsbBackupper
             try
             {
                 /* Create an FTP Request */
-                ftpRequest = (FtpWebRequest)WebRequest.Create(host + "/" + newDirectory);
-                /* Log in to the FTP Server with the User Name and Password Provided */
-                ftpRequest.Credentials = new NetworkCredential(user, pass);
-                /* When in doubt, use these options */
-                ftpRequest.UseBinary = true;
-                ftpRequest.UsePassive = true;
-                ftpRequest.KeepAlive = true;
-                /* Specify the Type of FTP Request */
-                ftpRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
-                /* Establish Return Communication with the FTP Server */
-                ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
-                /* Resource Cleanup */
-                ftpResponse.Close();
-                ftpRequest = null;
+                WebRequest request = WebRequest.Create(host + '/' + newDirectory);
+                request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                request.Credentials = new NetworkCredential(user, pass);
+                var resp = (FtpWebResponse)request.GetResponse();
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
-            return;
+        }
+
+        public void CreateDirectoryUpload(string newdirectory)
+        {
+            try
+            {
+                /* Create an FTP Request */
+                WebRequest request = WebRequest.Create(newdirectory);
+                request.Method = WebRequestMethods.Ftp.MakeDirectory;
+                request.Credentials = new NetworkCredential(user, pass);
+                var resp = (FtpWebResponse)request.GetResponse();
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
         }
 
         /* Get the Date/Time a File was Created */
